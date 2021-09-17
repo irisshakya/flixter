@@ -9,8 +9,8 @@ import UIKit
 import AlamofireImage
 
 class MoviesViewController: UIViewController, UITableViewDataSource, UITableViewDelegate {
-
-
+     
+    
     @IBOutlet weak var tableView:
         UITableView!
     
@@ -65,28 +65,40 @@ class MoviesViewController: UIViewController, UITableViewDataSource, UITableView
         let movie = movies[indexPath.row]
         let title = movie["title"] as! String
         let synopsis = movie["overview"] as! String
+        cell.titleLabel.text = title
+        cell.synopsisLabel.text = synopsis
+        
         let baseUrl = "https://image.tmdb.org/t/p/w185"
         let posterPath = movie["poster_path"] as! String
         //settign URL will validate if the string input is a url
         let posterUrl = URL(string: baseUrl + posterPath)
         
-        
-        cell.titleLabel.text = title
-        cell.synopsisLabel.text = synopsis
         cell.posterView.af_setImage(withURL: posterUrl!)
         
             return cell
     }
 
 
-    /*
+   
     // MARK: - Navigation
 
     // In a storyboard-based application, you will often want to do a little preparation before navigation
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         // Get the new view controller using segue.destination.
         // Pass the selected object to the new view controller.
+        print("Loading details screen")
+        
+        // Find the selected movie
+        let cell = sender as! UITableViewCell
+        let indexPath = tableView.indexPath(for: cell)!
+        let movie = movies[indexPath.row]
+        
+        // Pass the selected movie to the details view controller
+        let detailsViewController = segue.destination as! MovieDetailsViewController
+        detailsViewController.movie = movie
+        
+        tableView.deselectRow(at: indexPath, animated: true)
     }
-    */
+ 
 
 }
